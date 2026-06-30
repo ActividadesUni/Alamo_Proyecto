@@ -10,7 +10,6 @@ import {
   DollarSign, 
   PlusCircle, 
   CheckCircle2, 
-  AlertTriangle,
   History,
   TrendingUp
 } from 'lucide-react';
