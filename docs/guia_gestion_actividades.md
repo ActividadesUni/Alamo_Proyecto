@@ -46,7 +46,7 @@ Al listar o editar registros en la interfaz (Usuarios y Vehículos), el servidor
 ---
 
 ### 🚀 Issue 2: Requerimiento de Mejora (Completado)
-* **Título:** `feature: Rediseño completo del frontend en React y panel Dashboard interactivo`
+* **Título:** `fature: Rediseño ceompleto del frontend en React y panel Dashboard interactivo`
 * **Cuerpo (Markdown):**
 ```markdown
 ### Descripción
@@ -79,15 +79,36 @@ Automatizar las fases de construcción, prueba e integración del software para 
 
 ---
 
-## 3. Organización de GitHub Projects o Trello (Tablero Kanban)
+## 3. Configuración de Milestones (Hitos del Proyecto)
+
+Los **Milestones** agrupan los issues y pull requests para dar un seguimiento porcentual a las metas de entrega (versiones del software). Crea los siguientes hitos en la sección **Issues ➡️ Milestones** de tu GitHub:
+
+### 🏁 Hito 1: `v1.0.0-beta (Core & API Restoration)`
+* **Estado:** **Cerrado** (100% completado).
+* **Descripción:** Restauración de la arquitectura del backend, corrección de entidades JPA y configuración inicial de la base de datos PostgreSQL.
+* **Issues asociados:** Issue #1 (Bug de serialización).
+
+### 🏁 Hito 2: `v1.0.0-release (React Frontend & CI/CD)`
+* **Estado:** **Cerrado** (100% completado).
+* **Descripción:** Implementación de la UI premium en React Vite, dashboard de control y automatización de pipelines de CI/CD en Vercel y Render.
+* **Issues asociados:** Issue #2 (Frontend en React) e Issue #3 (CI/CD Pipeline).
+
+### 🏁 Hito 3: `v1.1.0 (Testing & Reporting Features)`
+* **Estado:** **Abierto** (Por hacer - 0% completado).
+* **Descripción:** Incorporación de exportación de reportes de alquiler en formato PDF y ampliación de cobertura de pruebas automatizadas en el backend.
+* **Issues asociados (A crear a futuro):** Tarea de JUnit y Tarea de reportes PDF.
+
+---
+
+## 4. Organización de GitHub Projects o Trello (Tablero Kanban)
 
 Crea un **GitHub Project** en la pestaña "Projects" de tu repositorio o un tablero en **Trello** con las siguientes columnas y tarjetas:
 
-| Columnas del Tablero | Tarjetas (Cards) a incluir | Asignado a | Estado |
-| :--- | :--- | :--- | :--- |
-| **Backlog / Por Hacer** | - Configurar pruebas unitarias con JUnit en backend.<br>- Agregar exportación de reportes PDF de alquileres. | (Sin asignar) | Por Hacer |
-| **En Progreso (In Progress)** | - Implementación de pruebas automatizadas CI/CD. | FrancoGPU | En Progreso |
-| **Hecho (Done)** | - **Issue #1:** bug: Error de serialización (HTTP 500) en APIs.<br>- **Issue #2:** feature: Rediseño del frontend en React.<br>- **Issue #3:** chore: Configuración de CI/CD con GitHub Actions. | FrancoGPU | Hecho |
+| Columnas del Tablero | Tarjetas (Cards) a incluir | Asignado a | Estado | Hito (Milestone) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Backlog / Por Hacer** | - Configurar pruebas unitarias con JUnit.<br>- Agregar exportación de reportes PDF. | (Sin asignar) | Por Hacer | `v1.1.0 (Testing & Reporting)` |
+| **En Progreso (In Progress)** | - Implementación de pruebas automatizadas CI/CD. | FrancoGPU | En Progreso | `v1.0.0-release` |
+| **Hecho (Done)** | - **Issue #1:** bug: Error de serialización.<br>- **Issue #2:** feature: Rediseño React.<br>- **Issue #3:** chore: Configuración de CI/CD. | FrancoGPU | Hecho | `v1.0.0-beta` / `v1.0.0-release` |
 
 ### 📸 Captura recomendada para el informe:
-Una vez que crees los 3 issues en GitHub y los añadas a tu **GitHub Project** (o Trello), muévelos a la columna **Done**. Toma una captura de pantalla del tablero. Se verá sumamente profesional al mostrar la relación directa entre el tablero de gestión de actividades y los issues reales que resolvimos en el código.
+Una vez que vincules los issues a sus respectivos Milestones y los cierres, GitHub te mostrará una barra de progreso al **100% completado** para los hitos `v1.0.0-beta` y `v1.0.0-release`, y al **0%** para `v1.1.0`. Toma una captura de pantalla de la pestaña **Milestones** en GitHub; servirá como evidencia perfecta de la planificación y release-management del proyecto.
