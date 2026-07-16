@@ -135,6 +135,44 @@ export const Contratos: React.FC = () => {
     setPrecioCalculado(subtotal);
   }, [formData, vehiculos, servicios]);
 
+  // Filtrar vehículos disponibles al cambiar fechas
+  useEffect(() => {
+    if (!formData.fechaInicio || !formData.fechaFin) return;
+    
+    let active = true;
+    const fetchDisponibles = async () => {
+      try {
+        const response = await api.get(`/vehiculos/disponibles?fechaInicio=${formData.fechaInicio}&fechaFin=${formData.fechaFin}`);
+        if (active) {
+          setVehiculos(response.data);
+          if (response.data.length > 0) {
+            const exists = response.data.some((v: any) => v.idVehiculo?.toString() === formData.idVehiculo);
+            if (!exists) {
+              setFormData(prev => ({
+                ...prev,
+                idVehiculo: response.data[0].idVehiculo?.toString() || ''
+              }));
+            }
+          } else {
+            setFormData(prev => ({
+              ...prev,
+              idVehiculo: ''
+            }));
+          }
+        }
+      } catch (e) {
+        console.error("Error al filtrar disponibilidad", e);
+      }
+    };
+
+    if (isModalOpen) {
+      fetchDisponibles();
+    }
+    return () => {
+      active = false;
+    };
+  }, [formData.fechaInicio, formData.fechaFin, isModalOpen]);
+
   const handleDownload = async (format: 'excel' | 'pdf') => {
     try {
       const response = await api.get(`/reportes/contratos/${format}`, {

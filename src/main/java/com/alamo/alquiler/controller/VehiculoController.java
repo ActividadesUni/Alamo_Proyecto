@@ -73,4 +73,14 @@ public class VehiculoController extends AbstractCrudController<Vehiculo, Integer
         });
         super.eliminar(id);
     }
+
+    @org.springframework.web.bind.annotation.GetMapping("/disponibles")
+    public java.util.List<Vehiculo> listarDisponibles(
+            @org.springframework.web.bind.annotation.RequestParam("fechaInicio") String fechaInicio,
+            @org.springframework.web.bind.annotation.RequestParam("fechaFin") String fechaFin
+    ) {
+        java.time.LocalDate inicio = java.time.LocalDate.parse(fechaInicio);
+        java.time.LocalDate fin = java.time.LocalDate.parse(fechaFin);
+        return repo.findVehiculosDisponibles(inicio, fin);
+    }
 }
