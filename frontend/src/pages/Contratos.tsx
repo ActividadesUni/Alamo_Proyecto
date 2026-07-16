@@ -32,6 +32,7 @@ export const Contratos: React.FC = () => {
   const [contratosSeguro, setContratosSeguro] = useState<ContratoSeguro[]>([]);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -308,12 +309,15 @@ export const Contratos: React.FC = () => {
 
   const filteredContratos = contratos.filter(c => {
     const term = searchTerm.toLowerCase();
-    return (
+    const matchesSearch = (
       c.codigo.toLowerCase().includes(term) ||
       (c.cliente && c.cliente.nombres.toLowerCase().includes(term)) ||
+      (c.cliente && c.cliente.apellidoPaterno?.toLowerCase().includes(term)) ||
       (c.vehiculo && c.vehiculo.placa.toLowerCase().includes(term)) ||
       (c.vehiculo && c.vehiculo.marca.toLowerCase().includes(term))
     );
+    const matchesCategory = filterCategory === '' || (c.vehiculo?.categoria?.tipo === filterCategory);
+    return matchesSearch && matchesCategory;
   });
 
   return (
@@ -340,8 +344,8 @@ export const Contratos: React.FC = () => {
       )}
 
       {/* Filtros */}
-      <div className="table-filters card">
-        <div className="search-bar">
+      <div className="table-filters card" style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+        <div className="search-bar" style={{ flex: 1 }}>
           <Search size={18} className="search-icon" />
           <input
             type="text"
@@ -350,6 +354,21 @@ export const Contratos: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+        </div>
+        
+        <div className="category-filter" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Categoría:</span>
+          <select
+            className="form-select"
+            style={{ width: '160px', padding: '6px 12px', fontSize: '0.85rem', height: '38px', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+          >
+            <option value="">Todas</option>
+            <option value="ECONOMICO">Económico</option>
+            <option value="ESTANDAR">Estándar</option>
+            <option value="PREMIUM">Premium</option>
+          </select>
         </div>
         <div className="export-actions" style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
           <button className="btn btn-secondary" onClick={() => handleDownload('excel')} title="Exportar a Excel">
