@@ -28,11 +28,43 @@ El sistema implementa una arquitectura desacoplada de tipo **Single Page Applica
                        └─────────────────────────┘
 ```
 
+### 🧱 1.1 Estructura de Capas por Arquitectura
+
+El siguiente diagrama en capas describe el flujo de comunicación y la distribución de responsabilidades en el sistema:
+
+```mermaid
+graph TD
+    subgraph Cliente_Frontend [Frontend - React / Vite]
+        View[Vistas / Páginas <br/> Usuarios.tsx, Vehiculos.tsx, Soporte.tsx]
+        Components[Componentes Comunes <br/> Sidebar, Navbar, Button, Table]
+        Context[Gestión de Estado / Sesión <br/> AuthContext.tsx]
+        Services[Servicios de API / Axios <br/> api.ts, usuarioService.ts, etc.]
+    end
+
+    subgraph API_Backend [Backend - Spring Boot / Java]
+        Controller[Capa Controladores REST <br/> AbstractCrudController, ReporteController, etc.]
+        Repository[Capa Acceso a Datos <br/> JpaRepository]
+        Entity[Capa Modelo / Entidades JPA <br/> tb_usuario, tb_vehiculo, tb_contrato]
+    end
+
+    subgraph Persistencia_BD [Capa de Persistencia]
+        DB[(Base de Datos PostgreSQL)]
+    end
+
+    View --> Components
+    View --> Context
+    View --> Services
+    Services -->|Peticiones HTTP / JSON| Controller
+    Controller --> Repository
+    Repository --> Entity
+    Repository -->|SQL / JDBC Driver| DB
+```
+
 ---
 
 ## 💻 2. Componentes del Backend (Spring Boot)
 
-El backend de Java está estructurado bajo las convenciones estándar de Spring Boot utilizando las siguientes capas:
+El backend de Java está estructurado bajo las convenciones estándar de Spring Boot utilizando las siguientes capas de código:
 
 ### Capa de Modelo (Entities)
 Las clases modelo representan las tablas físicas de la base de datos mapeadas con **Jakarta Persistence (JPA)**.
@@ -120,3 +152,69 @@ El flujo de integración está configurado en [.github/workflows/ci.yml](file://
 ### Despliegue en la Nube
 1. **Frontend (Vercel):** Hospedado de forma estática con soporte para Single Page Application routing (configurado en `vercel.json` para redirigir todas las peticiones a `index.html`).
 2. **Backend (Render):** Desplegado de forma automática a través de contenedores Docker (`docker/Dockerfile`) conectados a una base de datos PostgreSQL hospedada en la nube.
+
+---
+
+## 📂 6. Estructura de Código por Capas (Package Layout)
+
+El proyecto organiza sus directorios separando claramente el cliente frontend del servidor backend, distribuyendo el código en capas modulares:
+
+```mermaid
+classDiagram
+    class Frontend_Layers {
+        <<Directorio /frontend/src>>
+        /components (Componentes de layout reusables)
+        /context (AuthProvider, control de sesión y roles)
+        /pages (Dashboard, Usuarios, Vehiculos, Soporte)
+        /services (api.ts Axios y peticiones HTTP)
+        /styles (Estilos globales y variables de diseño)
+    }
+
+    class Backend_Layers {
+        <<Directorio /src/main/java/com/alamo/alquiler>>
+        /config (Configuraciones de CORS y Spring)
+        /controller (Endpoints y lógica de control REST)
+        /model (Entidades mapeadas con JPA y Hibernate)
+        /repository (Interfaces que heredan de JpaRepository)
+    }
+
+    class Testing_Layers {
+        <<Directorio /src/test/java/com/alamo/alquiler>>
+        /controller (Pruebas unitarias con MockMvc y Mockito)
+    }
+```
+
+---
+
+## 🔀 7. Flujo de Control de Ramas en Git (Git Branching Model)
+
+Para mantener un flujo de trabajo académico y ordenado que garantice la calidad e integración continua de las entregas de cada colaborador, se sigue el siguiente modelo de ramas y Pull Requests (PR):
+
+```mermaid
+graph TD
+    subgraph Repositorio_Remoto [GitHub Remotes]
+        main[Rama main <br/>Producción / Despliegues estables]
+        develop[Rama develop <br/>Rama de integración grupal]
+        feat[Rama feat/frontend-react <br/>Rama de características]
+        repair[Rama repair <br/>Hotfixes y reparaciones rápidas]
+
+        feat -->|Pull Request & JUnit CI OK| develop
+        develop -->|Pull Request de Entrega| main
+        repair -->|Pull Request Directo| main
+        repair -->|Sincronización posterior| develop
+    end
+```
+
+### Descripción del Flujo de Trabajo (Git Flow)
+
+1. **Rama `feat/frontend-react`:**
+   * Es la rama de trabajo activo donde se desarrollan los componentes React, servicios del frontend y endpoints REST del backend.
+   * Al finalizar una mejora, se abre un **Pull Request (PR)** hacia la rama `develop`.
+2. **Rama `develop`:**
+   * Actúa como el área de integración del equipo de desarrollo.
+   * Al abrir un PR hacia esta rama, **GitHub Actions** compila el backend y ejecuta la suite de 11 pruebas unitarias. Si compila y las pruebas pasan en verde (`BUILD SUCCESS`), se permite fusionar los cambios.
+3. **Rama `main`:**
+   * Representa la versión de producción estable y libre de fallos del software.
+   * Los cambios de `develop` se integran a `main` únicamente mediante Pull Requests aprobados al final de cada hito (Milestone).
+4. **Rama `repair`:**
+   * Reservada para correcciones de bugs o fallas críticas encontradas en producción. Una vez corregido el error, la corrección se mezcla en `main` y se sincroniza en `develop`.
