@@ -40,5 +40,37 @@ public class ContratoAlquilerController extends AbstractCrudController<ContratoA
         }
         return guardado;
     }
-}
 
+    @Override
+    public ContratoAlquiler actualizar(Integer id, ContratoAlquiler entidad) {
+        ContratoAlquiler guardado = super.actualizar(id, entidad);
+        try {
+            Notificacion notif = Notificacion.builder()
+                    .titulo("Contrato Actualizado")
+                    .mensaje("Contrato " + guardado.getCodigo() + " modificado/actualizado.")
+                    .tipo("CONTRATO")
+                    .build();
+            notificacionRepo.save(notif);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return guardado;
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        repo.findById(id).ifPresent(c -> {
+            try {
+                Notificacion notif = Notificacion.builder()
+                        .titulo("Contrato Cancelado")
+                        .mensaje("Contrato " + c.getCodigo() + " rescindido/eliminado.")
+                        .tipo("CONTRATO")
+                        .build();
+                notificacionRepo.save(notif);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        super.eliminar(id);
+    }
+}

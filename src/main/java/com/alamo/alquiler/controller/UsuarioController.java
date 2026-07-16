@@ -40,5 +40,37 @@ public class UsuarioController extends AbstractCrudController<Usuario, Integer> 
         }
         return guardado;
     }
-}
 
+    @Override
+    public Usuario actualizar(Integer id, Usuario entidad) {
+        Usuario guardado = super.actualizar(id, entidad);
+        try {
+            Notificacion notif = Notificacion.builder()
+                    .titulo("Colaborador Modificado")
+                    .mensaje("Datos de " + guardado.getNombres() + " actualizados con éxito.")
+                    .tipo("USUARIO")
+                    .build();
+            notificacionRepo.save(notif);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return guardado;
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        repo.findById(id).ifPresent(u -> {
+            try {
+                Notificacion notif = Notificacion.builder()
+                        .titulo("Colaborador Eliminado")
+                        .mensaje("Colaborador " + u.getNombres() + " retirado de la sucursal.")
+                        .tipo("USUARIO")
+                        .build();
+                notificacionRepo.save(notif);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        super.eliminar(id);
+    }
+}

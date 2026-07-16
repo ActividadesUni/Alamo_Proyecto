@@ -40,5 +40,37 @@ public class VehiculoController extends AbstractCrudController<Vehiculo, Integer
         }
         return guardado;
     }
-}
 
+    @Override
+    public Vehiculo actualizar(Integer id, Vehiculo entidad) {
+        Vehiculo guardado = super.actualizar(id, entidad);
+        try {
+            Notificacion notif = Notificacion.builder()
+                    .titulo("Vehículo Modificado")
+                    .mensaje("Vehículo " + guardado.getMarca() + " [" + guardado.getPlaca() + "] actualizado.")
+                    .tipo("VEHICULO")
+                    .build();
+            notificacionRepo.save(notif);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return guardado;
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        repo.findById(id).ifPresent(v -> {
+            try {
+                Notificacion notif = Notificacion.builder()
+                        .titulo("Vehículo Eliminado")
+                        .mensaje("Vehículo " + v.getMarca() + " [" + v.getPlaca() + "] removido de la flota.")
+                        .tipo("VEHICULO")
+                        .build();
+                notificacionRepo.save(notif);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        super.eliminar(id);
+    }
+}

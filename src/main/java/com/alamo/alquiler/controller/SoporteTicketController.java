@@ -40,4 +40,37 @@ public class SoporteTicketController extends AbstractCrudController<SoporteTicke
         }
         return guardado;
     }
+
+    @Override
+    public SoporteTicket actualizar(Integer id, SoporteTicket entidad) {
+        SoporteTicket guardado = super.actualizar(id, entidad);
+        try {
+            Notificacion notif = Notificacion.builder()
+                    .titulo(guardado.getEstado().equals("RESUELTO") ? "Ticket Resuelto" : "Ticket Modificado")
+                    .mensaje("El ticket de " + guardado.getCliente() + " fue marcado como " + guardado.getEstado() + ".")
+                    .tipo("SOPORTE")
+                    .build();
+            notificacionRepo.save(notif);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return guardado;
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        repo.findById(id).ifPresent(t -> {
+            try {
+                Notificacion notif = Notificacion.builder()
+                        .titulo("Ticket Eliminado")
+                        .mensaje("Ticket #" + t.getIdTicket() + " (" + t.getAsunto() + ") ha sido removido.")
+                        .tipo("SOPORTE")
+                        .build();
+                notificacionRepo.save(notif);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        super.eliminar(id);
+    }
 }
