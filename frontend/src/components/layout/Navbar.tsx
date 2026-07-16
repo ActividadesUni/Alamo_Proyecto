@@ -6,7 +6,8 @@ import {
   Clock, 
   CloudSun,
   CheckCheck,
-  BellOff
+  BellOff,
+  Menu
 } from 'lucide-react';
 import './Navbar.css';
 import api from '../../services/api';
@@ -20,7 +21,11 @@ interface NotificationItem {
   fechaCreacion?: string;
 }
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  onToggleSidebar?: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   const location = useLocation();
   const [time, setTime] = useState(new Date());
   const [showNotifications, setShowNotifications] = useState(false);
@@ -133,6 +138,9 @@ export const Navbar: React.FC = () => {
   return (
     <header className="navbar">
       <div className="navbar-left">
+        <button className="menu-toggle-btn" onClick={onToggleSidebar} title="Menú">
+          <Menu size={20} />
+        </button>
         <h2 className="navbar-title">{getPageTitle()}</h2>
       </div>
 

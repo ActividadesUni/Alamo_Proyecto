@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Sidebar } from './components/layout/Sidebar';
@@ -13,6 +13,7 @@ import { Soporte } from './pages/Soporte';
 
 const AppContent: React.FC = () => {
   const { user, isLoading } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -27,10 +28,25 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="app-container">
-      <Sidebar />
+    <div className={`app-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      {isSidebarOpen && (
+        <div 
+          className="sidebar-overlay" 
+          onClick={() => setIsSidebarOpen(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 999
+          }}
+        ></div>
+      )}
       <div className="main-content">
-        <Navbar />
+        <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <main className="page-container">
           <Routes>
             <Route path="/" element={<Dashboard />} />
