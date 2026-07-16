@@ -1,74 +1,79 @@
-# Álamo Rent-A-Car — Manual de Usuario
+# 🏢 Álamo Rent-A-Car — Manual de Usuario
 
-Bienvenido al manual del usuario de la plataforma de gestión de alquileres **Álamo Rent-A-Car**. Aquí se detalla el funcionamiento de cada uno de los módulos del sistema y cómo interactuar con ellos.
+Bienvenido al manual operativo de la plataforma de gestión de alquileres **Álamo Rent-A-Car**. Aquí se detalla el funcionamiento de cada uno de los módulos de la aplicación y cómo interactuar con ellos para una correcta administración del negocio.
 
 ---
 
-## 🔑 1. Acceso al Sistema (Control de Roles)
+## 🔑 1. Acceso al Sistema y Roles
 
-El sistema cuenta con una pantalla de inicio de sesión que simula dos roles operativos principales de la empresa:
+El sistema cuenta con un control de accesos basado en dos perfiles operativos:
 
 1. **Administrador del Sistema:**
-   * **Nombre de usuario:** `admin` (la contraseña puede ser cualquier texto).
-   * **Permisos:** Acceso completo a todas las secciones (Usuarios, Vehículos, Contratos, Configuración y Soporte). Puede resolver tickets de soporte.
+   * **Usuario:** `admin` (la contraseña puede ser cualquier texto).
+   * **Permisos:** Acceso ilimitado a todas las secciones: *Dashboard*, *Usuarios*, *Vehículos*, *Contratos*, *Configuración* y *Soporte*. Puede ver y resolver tickets de soporte, y purgar tickets resueltos.
 2. **Agente de Counter:**
-   * **Nombre de usuario:** Cualquier texto distinto de admin (ej. `juan` o `maria`).
-   * **Permisos:** Gestión de vehículos, creación de contratos, configuración y envío de tickets de soporte técnico. El módulo de **Usuarios** permanece oculto por motivos de seguridad.
+   * **Usuario:** Cualquier texto distinto de admin (ej. `juan` o `maria`).
+   * **Permisos:** Gestión de vehículos, creación y edición de contratos de alquiler, y envío de tickets de ayuda técnica. La sección de **Usuarios** permanece oculta por confidencialidad.
 
 ---
 
-## 📊 2. Panel de Control (Dashboard)
+## 📊 2. Panel de Control y Analíticas Interactivas
 
-Al ingresar al sistema, se despliega el Dashboard con las métricas clave de la empresa actualizadas en tiempo real desde la base de datos:
-* **Colaboradores Activos:** Número de usuarios registrados.
-* **Flota Registrada:** Autos disponibles en catálogo.
-* **Alquileres Activos:** Total de contratos registrados.
-* **Facturación Estimada:** Suma total de los montos de todos los contratos.
-
-En la parte inferior se muestra una tabla con la **Actividad Reciente**, listando de forma cronológica los últimos contratos formalizados.
+Al ingresar al sistema, el **Dashboard** muestra métricas clave sincronizadas en tiempo real:
+* **KPIs Directos:** Total de colaboradores activos, flota registrada, contratos de alquiler y facturación bruta estimada.
+* **Área Chart (Facturación Mensual):** Gráfico interactivo que muestra las tendencias de ingresos mensuales distribuidos a lo largo del año.
+* **Bar Chart (Flota por Categoría):** Histograma dinámico que muestra la cantidad de vehículos de tipo *Económico*, *Estándar* y *Premium*.
+* **Actividad Reciente:** Tabla en la parte inferior con las últimas transacciones registradas.
 
 ---
 
 ## 👥 3. Gestión de Colaboradores (Usuarios)
 
-*(Disponible únicamente para rol **Administrador**)*
-
-Permite dar de alta a los empleados internos de la sucursal:
-* **Búsqueda:** Filtro en tiempo real por nombre, correo electrónico o rol de trabajo.
-* **Registro / Edición:** Un formulario interactivo permite registrar o actualizar nombres, apellidos, correo y rol asignado (`ADMINISTRADOR` o `COUNTER`).
-* **Exportar Datos:** Dos botones dedicados en la barra de filtros permiten descargar el listado en:
-  * **Excel:** Genera un archivo descargable con formato tabular estructurado.
-  * **PDF:** Exporta un documento listo para impresión.
+*(Exclusivo para el rol **Administrador**)*
+* **Visualización:** Lista de empleados con su nombre, correo, rol e insignia del tipo de licencia de conducir.
+* **Filtros:** Barra de búsqueda para filtrar instantáneamente por nombre o correo.
+* **CRUD:** Botones para registrar nuevos colaboradores y editar datos existentes.
+* **Exportación:** Botones dedicados para descargar el listado completo en formato **Excel** o **PDF**.
 
 ---
 
 ## 🚗 4. Gestión de Flota (Vehículos)
 
-Sección para controlar el inventario de automóviles disponibles para renta:
-* **Registro de Autos:** Se requiere la placa (patente única), marca, modelo, año del vehículo y su categoría correspondiente.
-* **Categorías:**
-  * **Económica:** Autos pequeños ideales para ciudad.
-  * **Estándar:** Sedanes medianos y camionetas compactas familiares.
-  * **Premium:** Camionetas SUV grandes y autos de lujo.
-* **Exportación de Datos:** Descarga directa en formatos Excel y PDF desde el menú superior de la sección.
+* **Catálogo:** Muestra las placas (patentes únicas), marca, modelo, año y categoría del vehículo.
+* **Categorías y Tarifas:**
+  * **Económico (S/. 50.00/día):** Sedanes y hatchbacks pequeños.
+  * **Estándar (S/. 95.00/día):** Sedanes medianos y SUVs compactas.
+  * **Premium (S/. 175.00/día):** Camionetas de lujo y vehículos de gama alta.
+* **CRUD & Exportación:** Permite añadir nuevos autos a la flota, editar sus especificaciones y exportar las listas a Excel/PDF.
 
 ---
 
-## 📝 5. Registro y Gestión de Contratos de Alquiler
+## 📝 5. Módulo de Contratos de Alquiler
 
 Es el núcleo operativo del negocio. Permite registrar las salidas de autos alquilados:
+* **Filtros Avanzados:** Incluye una barra de búsqueda inteligente (por código, cliente o placa) y un dropdown selector para filtrar contratos por **Categoría del Vehículo** (Económico, Estándar, Premium).
 * **Formulario de Alquiler:**
-  * **Cliente y Vehículo:** Listas desplegables sincronizadas directamente con los registros de la base de datos.
-  * **Fechas:** Rango de días de alquiler.
-  * **Seguros:** Elección del tipo de póliza de protección.
-  * **Servicios Adicionales:** Opciones múltiples como GPS, conductor adicional o silla para bebé.
-* **Cálculo Automático de Tarifas:** El formulario calcula el subtotal y total a cobrar de forma dinámica y reactiva en pantalla mientras seleccionas los extras o cambias los rangos de fecha.
-* **Exportación de Contratos:** Los listados e históricos de contratos se pueden exportar a Excel y PDF con un solo clic para fines contables y de auditoría.
+  * Al ingresar las fechas de entrega y devolución, el formulario ejecuta un **filtro de disponibilidad reactivo**. Solo se listarán en el dropdown los vehículos libres en ese rango, excluyendo los que tengan un contrato activo.
+  * Permite añadir coberturas de seguro adicionales (S/. 25.00/día) y extras (GPS, conductor adicional, etc.).
+  * **Calculadora Reactiva:** Muestra en tiempo real el monto total estimado del alquiler mientras cambias las opciones del formulario.
+* **Visualización de Estados (Ciclo de Vida):**
+  * **Activo (Insignia verde):** Contrato vigente.
+  * **Rescindido (Insignia roja):** Contrato cancelado.
+* **Edición y Cancelación:**
+  * Al hacer clic en el ícono de lápiz o en "Editar Contrato" en la vista detallada, podrás modificar fechas, seguros o servicios del alquiler.
+  * Al hacer clic en el ícono de papelera, el contrato se marca como **Rescindido** (Soft-Delete) y sus botones de acción quedan deshabilitados de forma segura.
 
 ---
 
-## 🙋‍♂️ 6. Mesa de Soporte Técnico (Tickets de Ayuda)
+## 🔔 6. Sistema de Notificaciones
 
-Plataforma integrada de ayuda técnica para resolver problemas del personal interno:
-* **Para el Agente Counter:** Formulario de creación de tickets para reportar bugs, caídas de red o fallas en el registro de contratos. Cada ticket se almacena en estado `ABIERTO`.
-* **Para el Administrador:** Panel de incidentes. Los tickets abiertos aparecen listados de forma cronológica. El administrador puede leer el detalle del mensaje enviado y, una vez solucionado el inconveniente, presionar el botón **"Resolver"**, lo cual cambia el estado del ticket a `RESUELTO` con un distintivo visual verde.
+Ubicado en la parte superior derecha del Navbar (campana con contador):
+* Registra automáticamente una alerta cuando se crea, edita o elimina/rescinde un usuario, vehículo, contrato o ticket de soporte.
+* Permite leer detalles, marcar notificaciones individuales como leídas o utilizar el botón **"Marcar todas como leídas"** para limpiar la bandeja.
+
+---
+
+## 🙋‍♂️ 7. Mesa de Soporte Técnico (Tickets de Ayuda)
+
+* **Agente de Counter:** Puede reportar incidencias escribiendo un asunto y mensaje. El ticket se guarda como `ABIERTO`.
+* **Administrador:** Panel de incidentes. Permite leer la consulta, cambiar el estado a `RESUELTO` cuando se solucione, o eliminar de forma definitiva los tickets resueltos utilizando el botón de papelera.
