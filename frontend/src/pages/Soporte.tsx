@@ -9,7 +9,8 @@ import {
   AlertCircle, 
   Send, 
   Check,
-  LifeBuoy
+  LifeBuoy,
+  Trash2
 } from 'lucide-react';
 import './Soporte.css';
 import api from '../services/api';
@@ -106,6 +107,17 @@ export const Soporte: React.FC = () => {
     } catch (e) {
       console.error(e);
       alert('Error al actualizar el estado del ticket.');
+    }
+  };
+
+  const handleDeleteTicket = async (id: number) => {
+    if (!window.confirm('¿Está seguro de que desea eliminar este ticket de la bandeja?')) return;
+    try {
+      await api.delete(`/soporte/${id}`);
+      fetchTickets();
+    } catch (e) {
+      console.error(e);
+      alert('Error al eliminar el ticket.');
     }
   };
 
@@ -234,15 +246,31 @@ export const Soporte: React.FC = () => {
                         <span>{dateFormatted}</span>
                       </div>
 
-                      {isAdmin && t.estado === 'ABIERTO' && (
-                        <button 
-                          className="btn btn-secondary btn-sm resolve-btn"
-                          onClick={() => handleResolveTicket(t)}
-                        >
-                          <Check size={14} />
-                          <span>Resolver</span>
-                        </button>
-                      )}
+                      <div className="ticket-actions" style={{ display: 'flex', gap: '8px' }}>
+                        {isAdmin && t.estado === 'ABIERTO' && (
+                          <button 
+                            className="btn btn-secondary btn-sm resolve-btn"
+                            onClick={() => handleResolveTicket(t)}
+                          >
+                            <Check size={14} />
+                            <span>Resolver</span>
+                          </button>
+                        )}
+                        {isAdmin && (
+                          <button 
+                            className="btn btn-secondary btn-sm delete-btn"
+                            style={{ 
+                              color: '#ef4444', 
+                              backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                              borderColor: 'rgba(239, 68, 68, 0.2)' 
+                            }}
+                            onClick={() => handleDeleteTicket(t.idTicket!)}
+                            title="Eliminar ticket"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
