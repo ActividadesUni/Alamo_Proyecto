@@ -1,6 +1,8 @@
 package com.alamo.alquiler.controller;
 
+import com.alamo.alquiler.model.Notificacion;
 import com.alamo.alquiler.model.Vehiculo;
+import com.alamo.alquiler.repository.NotificacionRepository;
 import com.alamo.alquiler.repository.VehiculoRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,14 +13,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class VehiculoController extends AbstractCrudController<Vehiculo, Integer> {
 
     private final VehiculoRepository repo;
+    private final NotificacionRepository notificacionRepo;
 
-    public VehiculoController(VehiculoRepository repo) {
+    public VehiculoController(VehiculoRepository repo, NotificacionRepository notificacionRepo) {
         this.repo = repo;
+        this.notificacionRepo = notificacionRepo;
     }
 
     @Override
     protected JpaRepository<Vehiculo, Integer> repo() {
         return repo;
+    }
+
+    @Override
+    public Vehiculo crear(Vehiculo entidad) {
+        Vehiculo guardado = super.crear(entidad);
+        try {
+            Notificacion notif = Notificacion.builder()
+                    .titulo("Vehículo Registrado")
+                    .mensaje(guardado.getMarca() + " " + guardado.getModelo() + " [" + guardado.getPlaca() + "] añadido a la flota.")
+                    .tipo("VEHICULO")
+                    .build();
+            notificacionRepo.save(notif);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return guardado;
     }
 }
 
